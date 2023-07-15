@@ -1,5 +1,6 @@
 import { Stack, Button } from '@chakra-ui/react';
 import Hero from '../components/Hero';
+import { Link } from 'react-router-dom';
 
 function Home() {
   return (
@@ -10,12 +11,14 @@ function Home() {
     >
       <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
         <Button
+          as={Link}
           rounded={'full'}
           bg={'blue.400'}
           color={'white'}
           _hover={{
             bg: 'blue.500',
           }}
+          to='questions/new'
         >
           Open a Thread
         </Button>

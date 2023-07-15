@@ -1,7 +1,6 @@
 import {
   Box,
   Flex,
-  Text,
   IconButton,
   Button,
   Stack,
@@ -13,13 +12,21 @@ import {
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
+  Menu,
+  MenuButton,
+  Avatar,
+  MenuList,
+  MenuItem,
+  MenuDivider,
+  Text,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { Link as LinkComponent } from 'react-router-dom';
+import useSession from '../../hooks/useSession';
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
-
+  const { session, logout } = useSession();
   return (
     <Box>
       <Flex
@@ -67,29 +74,45 @@ export default function Navbar() {
           direction={'row'}
           spacing={6}
         >
-          <Button
-            as={'a'}
-            fontSize={'sm'}
-            fontWeight={400}
-            variant={'link'}
-            href={'#'}
-          >
-            Sign In
-          </Button>
-          <Button
-            as={'a'}
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'pink.400'}
-            href={'#'}
-            _hover={{
-              bg: 'pink.300',
-            }}
-          >
-            Sign Up
-          </Button>
+          {session ? (
+            <Menu>
+              <MenuButton
+                as={Button}
+                rounded={'full'}
+                variant={'link'}
+                cursor={'pointer'}
+                minW={0}
+              >
+                <Avatar
+                  size={'sm'}
+                  name={session?.user?.email?.replace('.', ' ')}
+                />
+              </MenuButton>
+              <MenuList>
+                <Text ml={3} size='xs' color='blue.700'>
+                  {session.user.email}
+                </Text>
+
+                <MenuDivider />
+                <MenuItem onClick={logout}>Logout</MenuItem>
+              </MenuList>
+            </Menu>
+          ) : (
+            <Button
+              as={LinkComponent}
+              display={{ base: 'none', md: 'inline-flex' }}
+              fontSize={'sm'}
+              fontWeight={600}
+              color={'white'}
+              bg={'pink.400'}
+              to='auth'
+              _hover={{
+                bg: 'pink.300',
+              }}
+            >
+              Sign In
+            </Button>
+          )}
         </Stack>
       </Flex>
 

@@ -1,10 +1,16 @@
 import { Stack, Text } from '@chakra-ui/react';
 import { FcLock } from 'react-icons/fc';
+import { Link } from 'react-router-dom';
 
-export default function QuestionRow({ description, title }) {
+export default function QuestionRow({ id, description, title }) {
   return (
     <Stack p='4' boxShadow='lg' borderRadius='sm'>
-      <Stack direction='row' alignItems='center'>
+      <Stack
+        as={Link}
+        direction='row'
+        alignItems='center'
+        to={`/questions/${id}`}
+      >
         <Text fontWeight='semibold'>{title}</Text>
         <FcLock />
       </Stack>
@@ -13,8 +19,13 @@ export default function QuestionRow({ description, title }) {
         direction={{ base: 'column', md: 'row' }}
         justifyContent='space-between'
       >
-        <Text fontSize={{ base: 'sm' }} textAlign={'left'} maxW={'4xl'}>
-          {description}
+        <Text
+          as='pre'
+          fontSize={{ base: 'sm' }}
+          textAlign={'left'}
+          maxW={'4xl'}
+        >
+          {description.substring(0, 100)}...
         </Text>
       </Stack>
     </Stack>

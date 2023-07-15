@@ -1,28 +1,65 @@
-import { Container, Heading } from '@chakra-ui/react';
+import { Button, Container, Heading, Spinner, Stack } from '@chakra-ui/react';
 import QuestionRow from '../../components/QuestionRow';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import supabase from '../../services/supabase';
 
 const Questions = () => {
-  const [questions, setQuestions] = useState([]);
+  const [state, setState] = useState({
+    loading: true,
+    questions: [],
+  });
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/posts')
-      .then((response) => response.json())
-      .then((data) => setQuestions(data))
-      .catch((error) => console.error(error));
-  }, [setQuestions]);
+    supabase
+      .from('MBThread')
+      .select('*')
+      .then((response) => {
+        setState({ loading: false, questions: response.data });
+      });
+  }, [setState]);
 
   return (
     <Container maxW={'6xl'}>
-      <Heading my={5}>Questions</Heading>
+      <Stack>
+        <Heading my={5}>Questions</Heading>
+        <Button
+          as={Link}
+          bg='blue.500'
+          to='new'
+          _hover={{ bg: 'blue.400' }}
+          color={'white'}
+          textAlign='right'
+        >
+          New Thread
+        </Button>
+      </Stack>
 
-      {questions.map((question, index) => (
-        <QuestionRow
-          description={question.body}
-          key={index}
-          title={`${index + 1} ${question.title}`}
-        />
-      ))}
+      {state.loading ? (
+        <Container
+          display='flex'
+          height='500px'
+          justifyContent='center'
+          alignItems='center'
+        >
+          <Spinner
+            thickness='4px'
+            speed='0.65s'
+            emptyColor='gray.200'
+            color='blue.500'
+            size='xl'
+          />
+        </Container>
+      ) : (
+        state.questions.map((question, index) => (
+          <QuestionRow
+            id={question.slug}
+            description={question.description}
+            key={index}
+            title={question.title}
+          />
+        ))
+      )}
     </Container>
   );
 };
