@@ -1,41 +1,41 @@
 import { Button, Container, Heading, Spinner, Stack } from '@chakra-ui/react';
-import QuestionRow from '../../components/QuestionRow';
-import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 import { Link } from 'react-router-dom';
+
+import QuestionRow from '../../components/QuestionRow';
 import supabase from '../../services/supabase';
+import useSession from '../../hooks/useSession';
+
+const getThreads = async () => {
+  const { data } = await supabase.from('MBThread').select('*');
+
+  return data;
+};
 
 const Questions = () => {
-  const [state, setState] = useState({
-    loading: true,
-    questions: [],
-  });
+  const { data: questions, isLoading } = useSWR('/threads', getThreads);
 
-  useEffect(() => {
-    supabase
-      .from('MBThread')
-      .select('*')
-      .then((response) => {
-        setState({ loading: false, questions: response.data });
-      });
-  }, [setState]);
+  const { session } = useSession();
 
   return (
     <Container maxW={'6xl'}>
       <Stack>
         <Heading my={5}>Questions</Heading>
-        <Button
-          as={Link}
-          bg='blue.500'
-          to='new'
-          _hover={{ bg: 'blue.400' }}
-          color={'white'}
-          textAlign='right'
-        >
-          New Thread
-        </Button>
+        {session && (
+          <Button
+            as={Link}
+            bg='blue.500'
+            to='new'
+            _hover={{ bg: 'blue.400' }}
+            color={'white'}
+            textAlign='right'
+          >
+            New Thread
+          </Button>
+        )}
       </Stack>
 
-      {state.loading ? (
+      {isLoading ? (
         <Container
           display='flex'
           height='500px'
@@ -51,7 +51,7 @@ const Questions = () => {
           />
         </Container>
       ) : (
-        state.questions.map((question, index) => (
+        questions.map((question, index) => (
           <QuestionRow
             id={question.slug}
             description={question.description}

@@ -10,7 +10,7 @@ import {
   FormErrorMessage,
   useToast,
 } from '@chakra-ui/react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,8 +19,9 @@ import supabase from '../../services/supabase';
 const threadSchema = z
   .object({
     description: z.string().min(3).max(1000),
-    title: z.string().min(4).max(100),
+    id: z.number().optional(),
     slug: z.string().optional(),
+    title: z.string().min(4).max(100),
   })
   .transform((form) => ({
     ...form,
@@ -34,12 +35,16 @@ const toastOptions = {
 };
 
 const QuestionForm = () => {
+  const { question } = useOutletContext() ?? {
+    question: { description: '', title: '' },
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
-    defaultValues: { description: '', title: '' },
+    defaultValues: question,
     mode: 'onChange',
     resolver: zodResolver(threadSchema),
   });
@@ -55,10 +60,12 @@ const QuestionForm = () => {
         throw error;
       }
 
+      const context = form.id ? 'updated' : 'created';
+
       toast({
         ...toastOptions,
-        title: 'Thread created.',
-        description: 'Thread created with success.',
+        title: `Thread ${context}.`,
+        description: `Thread ${context} with success.`,
         status: 'success',
       });
 

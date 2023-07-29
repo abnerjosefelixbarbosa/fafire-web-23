@@ -27,6 +27,7 @@ import useSession from '../../hooks/useSession';
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
   const { session, logout } = useSession();
+
   return (
     <Box>
       <Flex
@@ -84,6 +85,7 @@ export default function Navbar() {
                 minW={0}
               >
                 <Avatar
+                  src={session?.user?.user_metadata?.avatar_url}
                   size={'sm'}
                   name={session?.user?.email?.replace('.', ' ')}
                 />

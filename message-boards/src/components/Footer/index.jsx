@@ -12,17 +12,17 @@ import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 const SocialButton = ({ children, label, href }) => {
   return (
     <chakra.button
-      bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
-      rounded={'full'}
-      w={8}
-      h={8}
-      cursor={'pointer'}
-      as={'a'}
-      href={href}
-      display={'inline-flex'}
       alignItems={'center'}
+      as={'a'}
+      bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
+      cursor={'pointer'}
+      display={'inline-flex'}
+      h={8}
+      href={href}
       justifyContent={'center'}
+      rounded={'full'}
       transition={'background 0.3s ease'}
+      w={8}
       _hover={{
         bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
       }}
@@ -36,22 +36,24 @@ const SocialButton = ({ children, label, href }) => {
 export default function Footer() {
   return (
     <Box
-      position='fixed'
-      bottom={0}
-      width='100%'
       bg={useColorModeValue('gray.50', 'gray.900')}
+      bottom={0}
       color={useColorModeValue('gray.700', 'gray.200')}
+      position='fixed'
+      width='100%'
     >
       <Container
+        align={{ base: 'center', md: 'center' }}
         as={Stack}
+        direction={{ base: 'column', md: 'row' }}
+        justify={{ base: 'center', md: 'space-between' }}
         maxW={'6xl'}
         py={4}
-        direction={{ base: 'column', md: 'row' }}
         spacing={4}
-        justify={{ base: 'center', md: 'space-between' }}
-        align={{ base: 'center', md: 'center' }}
       >
-        <Text>© 2022 Chakra Templates. All rights reserved</Text>
+        <Text>
+          © {new Date().getFullYear()} Message Boards. All rights reserved
+        </Text>
         <Stack direction={'row'} spacing={6}>
           <SocialButton label={'Twitter'} href={'#'}>
             <FaTwitter />

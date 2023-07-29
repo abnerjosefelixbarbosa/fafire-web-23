@@ -17,7 +17,7 @@ const AppRouter = () => (
         <Route path='/questions'>
           <Route element={<Questions />} index />
           <Route element={<QuestionForm />} path='new' />
-          <Route element={<QuestionOutlet />} path=':id'>
+          <Route element={<QuestionOutlet />} path=':slug'>
             <Route index element={<Question />} />
             <Route element={<QuestionForm />} path='update' />
           </Route>
