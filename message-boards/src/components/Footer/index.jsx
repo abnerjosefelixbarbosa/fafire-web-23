@@ -51,9 +51,7 @@ export default function Footer() {
         py={4}
         spacing={4}
       >
-        <Text>
-          © {new Date().getFullYear()} Message Boards. All rights reserved
-        </Text>
+        <Text>© {new Date().getFullYear()} Message Boards.</Text>
         <Stack direction={'row'} spacing={6}>
           <SocialButton label={'Twitter'} href={'#'}>
             <FaTwitter />
